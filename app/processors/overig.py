@@ -31,9 +31,12 @@ def export_overig_from_xlsx_bytes(xlsx_bytes: bytes) -> str:
     global _FUNCS
     if _FUNCS is None:
         _FUNCS = _bootstrap_overig_funcs()
-    xls = pd.ExcelFile(xlsx_bytes)
-    sheet1 = pd.read_excel(xls, sheet_name=xls.sheet_names[0], dtype=str)
-    sheet2 = pd.read_excel(xls, sheet_name=xls.sheet_names[1], dtype=str)
+    import io
+
+bio = io.BytesIO(xlsx_bytes)           # <-- wrap in BytesIO
+xls = pd.ExcelFile(bio)
+sheet1 = pd.read_excel(xls, sheet_name=xls.sheet_names[0], dtype=str)
+sheet2 = pd.read_excel(xls, sheet_name=xls.sheet_names[1], dtype=str)
 
     blocks = _FUNCS["to_render_blocks"](sheet1, sheet2)
     blocks = _FUNCS["suppress_redundant_sportheads"](blocks)
