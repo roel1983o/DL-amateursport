@@ -19,17 +19,29 @@ def _make_txt_stream(data: str, filename: str) -> StreamingResponse:
     headers = {"Content-Disposition": f'attachment; filename="{filename}"'}
     return StreamingResponse(buf, media_type="text/plain; charset=utf-8", headers=headers)
 
+from fastapi import HTTPException
+import traceback, logging
+logger = logging.getLogger("uvicorn.error")
+
 @app.post("/api/voetbal")
 async def api_voetbal(file: UploadFile = File(...)):
-    content = await file.read()
-    txt = export_voetbal_from_xlsx_bytes(content)
-    return _make_txt_stream(txt, "opmaakscript_voetbal.txt")
+    try:
+        content = await file.read()
+        txt = export_voetbal_from_xlsx_bytes(content)
+        return _make_txt_stream(txt, "opmaakscript_voetbal.txt")
+    except Exception as e:
+        logger.error("Voetbal export crash:\n%s", traceback.format_exc())
+        raise HTTPException(status_code=400, detail=f"Voetbal: {e}")
 
 @app.post("/api/overig")
 async def api_overig(file: UploadFile = File(...)):
-    content = await file.read()
-    txt = export_overig_from_xlsx_bytes(content)
-    return _make_txt_stream(txt, "opmaakscript_overig.txt")
+    try:
+        content = await file.read()
+        txt = export_overig_from_xlsx_bytes(content)
+        return _make_txt_stream(txt, "opmaakscript_overig.txt")
+    except Exception as e:
+        logger.error("Overig export crash:\n%s", traceback.format_exc())
+        raise HTTPException(status_code=400, detail=f"Overig: {e}")
 
 @app.get("/download/template/{kind}")
 def download_template(kind: str):
