@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DL regiosport codefixer</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>DL regiosport codefixer</h1>
+
+      <div class="card">
+        <h2>Uitslagen amateursport voetbal</h2>
+        <p>Upload het ingevulde Excelbestand (.xlsx). Klik daarna op de knop hieronder. Je krijgt dan een txt-bestand dat je in CUE moet plakken.</p>
+        <form action="/api/voetbal" method="post" enctype="multipart/form-data" class="form">
+          <input type="file" name="file" accept=".xlsx" required>
+          <div class="row">
+            <button type="submit">Maak CUE export (.txt)</button>
+            <a class="btn secondary" href="/download/template/voetbal">Download leeg invulbestand (.xlsx)</a>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Uitslagen amateursport overig</h2>
+        <p>Upload het ingevulde Excelbestand (.xlsx). Klik daarna op de knop hieronder. Je krijgt dan een txt-bestand dat je in CUE moet plakken.</p>
+        <form action="/api/overig" method="post" enctype="multipart/form-data" class="form">
+          <input type="file" name="file" accept=".xlsx" required>
+          <div class="row">
+            <button type="submit">Maak CUE export (.txt)</button>
+            <a class="btn secondary" href="/download/template/overig">Download leeg invulbestand (.xlsx)</a>
+          </div>
+        </form>
+      </div>
+
+      <footer>© DL regiosport codefixer</footer>
+    </div>
+  </body>
+</html>
